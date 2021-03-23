@@ -46,85 +46,99 @@ function closeModalBtn() {
   modalbg.style.display = "none";
 }
 
-// submit validation
-confirmationMessage.style.display = "none";
-
 // custom error messages
-first.addEventListener("input", function () {
-  console.log(first.validity);
-  if (first.validity.tooShort) {
-    first.setCustomValidity("Veuillez entrer 2 caractères ou plus pour le champ du nom.");
-  }
- else {
-    first.setCustomValidity("");
-  }
-});
-
-last.addEventListener("input", function () {
-  console.log(last.validity);
-  if (last.validity.tooShort) {
-    last.setCustomValidity("Veuillez entrer 2 caractères ou plus pour le champ du nom.");
-  }
-  else {
-    last.setCustomValidity("");
-  }
-});
-
-quantity.addEventListener("input", function () {
-  console.log(quantity.validity);
-  if (quantity.validity.valueMissing) {
-    quantity.setCustomValidity("Vous devez choisir une option.");
-  } 
-  else {
-    quantity.setCustomValidity("");
-  }
-});
-
-birthdate.addEventListener("input", function () {
-  console.log(birthdate.validity);
-  if (birthdate.validity.valueMissing) {
-    birthdate.setCustomValidity("Vous devez entrer votre date de naissance.");
-  } else {
-    birthdate.setCustomValidity("");
-  }
-});
-
-quantity.setCustomValidity("Vous devez choisir une option.");
-first.setCustomValidity("Veuillez entrer 2 caractères ou plus pour le champ du nom.");
-last.setCustomValidity("Veuillez entrer 2 caractères ou plus pour le champ du nom.");
-birthdate.setCustomValidity("Vous devez entrer votre date de naissance.");
-
-
-
 form.addEventListener("submit", function (e) {
-  form.style.display = "none";
-  const listeRadio = document.querySelector("#liste-radio");
-  const errorMessage = document.createElement("span")
-  if (document.getElementById("errorMessage")) listeRadio.removeChild(document.getElementById("errorMessage") || null)
-    errorMessage.setAttribute("id", "errorMessage")
-    console.log(form.location.value);
-  if (!form.location.value & Number(quantity.value) > 0) {
-    e.preventDefault() 
-    console.log(form.location, quantity);
-    errorMessage.textContent = "Vous avez choisi un nombre de participations supérieur à 1, merci de sélectionner au moins une ville";
-    listeRadio.appendChild(errorMessage);
-    return false }
+  e.preventDefault()
+  let isValid = true
+  const firstField = getField("first")
+  cleanContainer(firstField.container)
+  if (firstField.field.value.length < 2) {
+    isValid = false
+    const error = createError("Veuillez entrer 2 caractères ou plus pour le champ du prénom")
+    firstField.container.appendChild(error)
+    first.style.outline = "solid", "red";
+  }
+  const lastField = getField("last")
+  cleanContainer(lastField.container)
+  if (lastField.field.value.length < 2) {
+    isValid = false
+    const error = createError("Veuillez entrer 2 caractères ou plus pour le champ du prénom")
+    lastField.container.appendChild(error)
+  }
+  const dateField = getField("birthdate")
+  cleanContainer(dateField.container)
+  if (new Date(dateField.field.value).toString() === 'Invalid Date') {
+    isValid = false
+    const error = createError("Vous devez entrer votre date de naissance")
+    dateField.container.appendChild(error)
+  }
+  const quantityField = getField("quantity")
+  cleanContainer(quantityField.container)
+  if (!quantityField.field.value || Number(quantityField.field.value) < 0) {
+    isValid = false
+    const error = createError("Vous devez choisir une option")
+    quantityField.container.appendChild(error)
+  }
+  const emailField = getField('email')
+  cleanContainer(emailField.container)
+  if (!/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/) {
+    isValid = false
+    const error = createError("Adresse mail invalide")
+    emailField.container.appenChild(error)
+  }
+  const conditionsField = getField("checkbox1")
+  cleanContainer(conditionsField.container)
+  if (!conditionsField.field.checked) {
+    const error = createError("Vous devez vérifier que vous acceptez les termes et conditions")
+    conditionsField.container.appendChild(error)
+  }
+  const isOneLocationChecked = Array.from(form.location).find((item) => {
+    return item.checked
+  })
+  
+  const locationField = getField("location")
+  cleanContainer(locationField.container)
+  if (!isOneLocationChecked && Number(locationField.field.value) > 0) {
+    isValid = false
+    const error = createError('Vous devez sélectionner une ville')
+    locationField.container.appenChild(error)
+  }
 
-let validationFailed = false;
-if (validationFailed) {
-e.preventDefault();
-return false;
-}
-else {
-  submit.addEventListener("click", closeModalBtn)
-  confirmationMessage.style.fontSize = "20px";
-  confirmationMessage.style.textAlign = "center";
-  confirmationMessage.style.display = "block";
-  setTimeout(closeModalBtn(), 1000);
-  e.preventDefault();
-  return true;
-    }
+  if (isValid) {
+    const validationMessage = document.createElement("div")
+    validationMessage.textContent= "message bien envoyé"
+    document.querySelector(".validation").style.borderColor = "red";
+    form.appendChild(validationMessage)
+    validationMessage.setAttribute("class", "validation")
+  }
 });
+
+// NEW VERSION
+const getField = (fieldName) => {
+  const container = document.querySelector(`#${fieldName}-field`)
+  const field = document.querySelector(`#${fieldName}`)
+  return {
+    field,
+    container,
+  }
+}
+
+const createError = (errorMessage) => {
+  const element = document.createElement('span')
+  element.setAttribute("class", "error")
+  element.textContent = errorMessage
+  element.style.fontSize = "15px";
+  element.style.color = "red";
+  return element;
+}
+
+const cleanContainer = (container) => {
+  const errors = container.getElementsByClassName("error")
+  for (let error of errors) {
+    container.removeChild(error)
+  }
+}
+
 
 
 

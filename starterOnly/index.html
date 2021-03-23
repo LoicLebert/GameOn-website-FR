@@ -62,7 +62,9 @@
               method="get"
             >
               <div
-                class="formData">
+                class="formData"
+                id = "first-field"
+              >
                 <label for='first'>Prénom</label><br>
                 <input
                   class="text-control"
@@ -70,10 +72,10 @@
                   id="first"
                   name="first"
                   minlength="2"
-                  required
                 /><br>
               </div>
               <div
+                id = "last-field"
                 class="formData">
                 <label for='last'>Nom</label><br>
                 <input
@@ -82,10 +84,10 @@
                   id="last"
                   name="last"
                   minlength="2"
-                  required
                 /><br>
               </div>
               <div
+                id="email-field"
                 class="formData">
                 <label for="email">E-mail</label><br>
                 <input
@@ -93,10 +95,10 @@
                   type="email"
                   id="email"
                   name="email"
-                  required
                 /><br>
               </div>
               <div
+                id ="birthdate-field"
                 class="formData">
                 <label for="birthdate">Date de naissance</label><br>
                 <input
@@ -104,16 +106,16 @@
                   type="date"
                   id="birthdate"
                   name="birthdate"
-                  required
                 /><br>
               </div>
               <div
+                id ="quantity-field"
                 class="formData">
                 <label for="quantity">À combien de tournois GameOn avez-vous déjà participé ?</label><br>
-                <input type="number" class="text-control" id="quantity" name="quantity" min="0" max="99" required>
+                <input type="number" class="text-control" id="quantity" name="quantity" min="0" max="99">
               </div>
               <p class="text-label">Quelles villes ?</p>
-              <div id="liste-radio"
+              <div id="location-field"
                 class="formData">
                 <input
                   class="checkbox-input"
@@ -184,6 +186,7 @@
               </div>
 
               <div
+                id="checkbox1-field"
                 class="formData">
                 <input
                   class="checkbox-input"
@@ -191,7 +194,7 @@
                   id="checkbox1"
                   checked
                 />
-                <label class="checkbox2-label" id="conditions" for="checkbox1" required>
+                <label class="checkbox2-label" id="conditions" for="checkbox1">
                   <span class="checkbox-icon"></span>
                   J'ai lu et accepté les conditions d'utilisation.
                 </label>
@@ -210,8 +213,6 @@
                 value="C'est parti"
               />
             </form>
-            <div id="confirmationMessage">Merci ! Votre réservation a été reçue.</div>
-            <p style="color: red" id="error"></p>
           </div>
         </div>
       </div>

@@ -46,25 +46,31 @@ function closeModalBtn() {
   modalbg.style.display = "none";
 }
 
-// custom error messages
+// ERROR MESSAGES
+// first name error
 form.addEventListener("submit", function (e) {
   e.preventDefault()
   let isValid = true
   const firstField = getField("first")
   cleanContainer(firstField.container)
-  if (firstField.field.value.length < 2) {
+  if (firstField.field.value.length < 2 || !firstField.field.value) {
     isValid = false
     const error = createError("Veuillez entrer 2 caractères ou plus pour le champ du prénom")
+    firstField.field.style.borderColor = "red";
     firstField.container.appendChild(error)
-    first.style.outline = "solid", "red";
   }
+
+  // last name error
   const lastField = getField("last")
   cleanContainer(lastField.container)
   if (lastField.field.value.length < 2) {
     isValid = false
     const error = createError("Veuillez entrer 2 caractères ou plus pour le champ du prénom")
+    document.querySelector("#last-field").style.borderColor = "red";
     lastField.container.appendChild(error)
   }
+
+  //birthdate error
   const dateField = getField("birthdate")
   cleanContainer(dateField.container)
   if (new Date(dateField.field.value).toString() === 'Invalid Date') {
@@ -72,6 +78,8 @@ form.addEventListener("submit", function (e) {
     const error = createError("Vous devez entrer votre date de naissance")
     dateField.container.appendChild(error)
   }
+
+  // tournament error
   const quantityField = getField("quantity")
   cleanContainer(quantityField.container)
   if (!quantityField.field.value || Number(quantityField.field.value) < 0) {
@@ -79,41 +87,49 @@ form.addEventListener("submit", function (e) {
     const error = createError("Vous devez choisir une option")
     quantityField.container.appendChild(error)
   }
+
+  // email error
   const emailField = getField('email')
   cleanContainer(emailField.container)
-  if (!/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/) {
+  console.log(emailField)
+  if (!/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(emailField.field.value)) {
     isValid = false
     const error = createError("Adresse mail invalide")
-    emailField.container.appenChild(error)
+    emailField.container.appendChild(error)
   }
-  const conditionsField = getField("checkbox1")
+
+  // conditions error
+  const conditionsField = getField("conditions")
   cleanContainer(conditionsField.container)
   if (!conditionsField.field.checked) {
+    isValid = false
     const error = createError("Vous devez vérifier que vous acceptez les termes et conditions")
     conditionsField.container.appendChild(error)
   }
+
+  // location error
   const isOneLocationChecked = Array.from(form.location).find((item) => {
     return item.checked
   })
   
   const locationField = getField("location")
   cleanContainer(locationField.container)
-  if (!isOneLocationChecked && Number(locationField.field.value) > 0) {
+  if (!isOneLocationChecked && Number(quantityField.field.value) > 0) {
     isValid = false
     const error = createError('Vous devez sélectionner une ville')
-    locationField.container.appenChild(error)
+    locationField.container.appendChild(error)
   }
 
+  // validation message
   if (isValid) {
     const validationMessage = document.createElement("div")
     validationMessage.textContent= "message bien envoyé"
-    document.querySelector(".validation").style.borderColor = "red";
     form.appendChild(validationMessage)
     validationMessage.setAttribute("class", "validation")
   }
 });
 
-// NEW VERSION
+// field selection
 const getField = (fieldName) => {
   const container = document.querySelector(`#${fieldName}-field`)
   const field = document.querySelector(`#${fieldName}`)
@@ -123,6 +139,7 @@ const getField = (fieldName) => {
   }
 }
 
+// error message
 const createError = (errorMessage) => {
   const element = document.createElement('span')
   element.setAttribute("class", "error")
@@ -132,12 +149,16 @@ const createError = (errorMessage) => {
   return element;
 }
 
+// clean container function
 const cleanContainer = (container) => {
   const errors = container.getElementsByClassName("error")
   for (let error of errors) {
     container.removeChild(error)
   }
 }
+
+// message d'erreur conditions même si elles sont checked, le formulaire est envoyé même si les conditions ne sont pas checked
+// fermer la modal : check, implémenter les donner du formulaire : check, messages d'erreur : check, message de confirmation à l'envoi : check, tests manuels : todo
 
 
 

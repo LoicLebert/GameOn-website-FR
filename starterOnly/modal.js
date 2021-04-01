@@ -29,6 +29,7 @@ const checkbox2 = document.querySelector("#checkbox2");
 const submit = document.querySelector(".btn-submit");
 const confirmationMessage = document.querySelector("#confirmationMessage");
 const conditions = document.querySelector("#conditions");
+const closeValidation = document.querySelector(".btn-close");
 
 // launch modal event
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
@@ -92,7 +93,7 @@ form.addEventListener("submit", function (e) {
   const emailField = getField('email')
   cleanContainer(emailField.container)
   console.log(emailField)
-  if (!/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(emailField.field.value)) {
+  if (!/^([a-z\d\.-]+)@([a-z\d-]+)\.([a-z]{2,8})(\.[a-z]{2,8})?$/.test(emailField.field.value)) {
     isValid = false
     const error = createError("Adresse mail invalide")
     emailField.container.appendChild(error)
@@ -126,6 +127,12 @@ form.addEventListener("submit", function (e) {
     validationMessage.textContent= "message bien envoyé"
     form.appendChild(validationMessage)
     validationMessage.setAttribute("class", "validation")
+    closeValidation.style.display = "block";
+    closeValidation.style.zIndex = "1";
+    closeValidation.addEventListener("click", closeValidationBtn)
+  }
+  function closeValidationBtn() {
+    modalbg.style.display = "none";
   }
 });
 
@@ -157,8 +164,7 @@ const cleanContainer = (container) => {
   }
 }
 
-// message d'erreur conditions même si elles sont checked, le formulaire est envoyé même si les conditions ne sont pas checked
-// fermer la modal : check, implémenter les donner du formulaire : check, messages d'erreur : check, message de confirmation à l'envoi : check, tests manuels : todo
+
 
 
 

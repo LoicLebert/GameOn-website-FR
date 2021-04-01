@@ -298,6 +298,7 @@ input[data-error]::after {
 }
 .close {
   position: absolute;
+  z-index: 2;
   right: 15px;
   top: 15px;
   width: 32px;
@@ -515,6 +516,19 @@ footer {
     margin-top: 50px;
     text-align: center;
   }
+}
+
+/* validation message */
+.validation {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #232323;
 }
 
 @keyframes modalopen {
